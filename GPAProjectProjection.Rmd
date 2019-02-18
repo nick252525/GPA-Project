@@ -1,0 +1,74 @@
+---
+title: "GPA Project"
+author: "Nick Tandle"
+date: "2/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Packages:
+```{r}
+install.packages("rvest")
+install.packages("stringr")
+install.packages("readxl")
+
+library("rvest")
+library("stringr")
+library("readxl")
+```
+
+
+Getting Course GPA Dataset
+```{r, eval=FALSE}
+wade_datasetV2 <- read_excel("Wade_DatasetV2.xlsx",
+                             sheet = "TestSpring2018")
+```
+
+
+Creation of URLs for extraction
+```{r}
+course_abbreviations= unique(wade_datasetV2$Subject)
+
+final_course_urls= paste0("http://catalog.illinois.edu/courses-of-instruction/",tolower(course_abbreviations),"/")
+```
+
+
+Extracting credit hours from the URLs  of each course.
+
+Not generalized yet:
+```{r}
+Course_credits =
+  read_html(psyc) %>%
+  html_nodes(".courseblocktitle") %>%
+  html_text() %>%
+  str_extract_all(, pattern = "credit:[:blank:][:digit:][:blank:]to[:blank:][:digit:]|credit:[:blank:][:digit:]")
+```
+
+
+Extracting course abbreviation to combine with credit hour
+
+Not generalized yet:
+```{r}
+Course_abbreviations=
+read_html(psyc) %>%
+  html_nodes(".courseblocktitle") %>%
+  html_text() %>%
+  str_extract_all(pattern= "PSYC[:blank:][:digit:]{3}") %>%
+  str_replace_all(pattern = "[:blank:]", replacement = "")
+```
+
+
+Function that merges course abbreviations and credit hours
+```{r}
+
+
+```
+
+^^^^^^^^^^^^^^^^Check notebook for ideas.
+
+check the fizzbuzz homework assignment for generalizing function to allow for multiple x values

@@ -1,0 +1,51 @@
+---
+title: "GPAProjectProjectionScraps"
+author: "Nick Tandle"
+date: "2/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+**Testing merging abrev and credit hours
+```{r}
+test_credit = as.character(testing_credits)
+test_abrev = as.character(Psych_course_abbreviations)
+psyc_final = data.frame(as.vector(test_abrev), as.vector(test_credit))
+
+```
+
+
+
+Now creating a generalized program that will extract the course names and their corresponding credit hours from the list of all college department URLs.
+
+Showing first few urls to be put into function.
+```{r}
+head(final_course_urls)
+
+```
+
+Small subset of URLS for testing as I create function:
+```{r}
+Some_Course_URLs=head(final_course_urls)
+
+```
+
+
+```{r}
+AbrevAndCredit_Extractor= function(x){
+  read_html(x) %>%
+  html_nodes(".courseblocktitle") %>%
+  html_text() %>%
+  str_extract_all(pattern= "[:blank:][:digit:]{3}") %>%
+  str_replace_all(pattern = "[:blank:]", replacement = "")
+}
+
+AbrevAndCredit_Extractor(Some_Course_URLs)
+
+
+```
