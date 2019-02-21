@@ -37,15 +37,69 @@ Some_Course_URLs=head(final_course_urls)
 
 
 ```{r}
-AbrevAndCredit_Extractor= function(x){
-  read_html(x) %>%
-  html_nodes(".courseblocktitle") %>%
+test_url="http://catalog.illinois.edu/courses-of-instruction/ae/"
+
+abb_function(test_url)
+
+
+{
+read_html(test_url) %>%
+  html_nodes(".schedlink") %>%
   html_text() %>%
-  str_extract_all(pattern= "[:blank:][:digit:]{3}") %>%
+  str_extract_all(pattern= "[:alpha:]{3,4}[:blank:][:digit:]{3}") %>%
   str_replace_all(pattern = "[:blank:]", replacement = "")
 }
 
-AbrevAndCredit_Extractor(Some_Course_URLs)
+
+test= mapply(FUN = abb_function, Some_Course_URLs)
+test2= mapply(FUN = credit_function, Some_Course_URLs)
+test2
+
+engl_url="http://catalog.illinois.edu/courses-of-instruction/engl/"
+abb_function(engl_url)
+credit_function(engl_url)
 
 
+  read_html(engl_url) %>%
+  html_nodes(".courseblocktitle") %>%
+  html_text() %>%
+  str_extract_all(, pattern = "credit:[:blank:][:digit:]")
 ```
+
+
+```{r}
+  read_html(engl_url) %>%
+  html_nodes(".courseblocktitle") %>%
+  html_text() %>%
+  str_extract_all(, pattern = "credit:[:blank:][:digit:][:blank:]to[:blank:][:digit:]|credit:[:blank:][:digit:]")
+```
+
+
+
+figuring out combining the credits and abbreviations:
+```{r}
+head_abb=head(all_abbreviations,2)
+head_credit= head(all_credits,2)
+
+
+
+do.call(rbind, Map(data.frame, A=as.character(head_abb), B=as.character(head_credit)))
+
+summary(head_abb)
+summary(as.character(head_credit))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

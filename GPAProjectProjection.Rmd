@@ -48,9 +48,22 @@ Course_credits =
   html_text() %>%
   str_extract_all(, pattern = "credit:[:blank:][:digit:][:blank:]to[:blank:][:digit:]|credit:[:blank:][:digit:]")
 ```
+Generalized:
+```{r}
+credit_function= function(x){
+  tryCatch(
+  read_html(x) %>%
+  html_nodes(".courseblocktitle") %>%
+  html_text() %>%
+  str_extract_all(, pattern = "credit:[:blank:][:digit:][:blank:]to[:blank:][:digit:]|credit:[:blank:][:digit:]"),
+  error = function(e) {NA})
+  }
+```
 
 
-Extracting course abbreviation to combine with credit hour
+
+
+Extracting course abbreviation
 
 Not generalized yet:
 ```{r}
@@ -62,13 +75,42 @@ read_html(psyc) %>%
   str_replace_all(pattern = "[:blank:]", replacement = "")
 ```
 
-
-Function that merges course abbreviations and credit hours
+Generalized:
 ```{r}
-
-
+abb_function = function(x) {
+  tryCatch(
+    read_html(x) %>%
+      html_nodes(".courseblocktitle") %>%
+      html_text() %>%
+      str_extract(pattern = "[:alpha:]{2,4}[:blank:][:digit:]{3}") %>%
+      str_replace_all(pattern = "[:blank:]", replacement = ""),
+    error = function(e) {NA}
+  )
+}
 ```
 
-^^^^^^^^^^^^^^^^Check notebook for ideas.
 
-check the fizzbuzz homework assignment for generalizing function to allow for multiple x values
+extracting all course abbreviations and credit hours
+```{r}
+all_abbreviations= mapply(FUN = abb_function, final_course_urls)
+all_credits= mapply(FUN = credit_function, final_course_urls)
+```
+
+
+combining all 
+```{r}
+head_abb=head(all_abbreviations,2)
+
+
+abb_cred_all=data.frame(all_abbreviations,all_credits)
+```
+
+```{r}
+library(xlsx)
+write.xlsx(mydata, "c:/mydata.xlsx")
+```
+
+
+
+
+
