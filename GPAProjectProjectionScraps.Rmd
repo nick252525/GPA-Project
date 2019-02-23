@@ -81,6 +81,10 @@ figuring out combining the credits and abbreviations:
 head_abb=head(all_abbreviations,2)
 head_credit= head(all_credits,2)
 
+combined_head_abb= c(all_abbreviations)
+combined_head_abb
+
+all_head= data.frame(as.vector(head_abb), as.vector(head_credit))
 
 
 do.call(rbind, Map(data.frame, A=as.character(head_abb), B=as.character(head_credit)))
@@ -88,6 +92,102 @@ do.call(rbind, Map(data.frame, A=as.character(head_abb), B=as.character(head_cre
 summary(head_abb)
 summary(as.character(head_credit))
 ```
+
+
+
+```{r}
+install.packages("dplyr")
+library(dplyr)
+
+head_abb_test= data.frame(unlist(head_abb, head_credit))
+head_credit_test= data.frame(unlist(head_credit))
+
+head_test_all= bind_cols(head_abb_test,head_credit_test)
+
+colnames(head_test_all)=c("abb", "credit")
+head_test_all
+```
+
+
+```{r}
+rm(head_abb_test)
+rm(head_credit_test)
+rm(head_test_all)
+
+rm(df3)
+```
+
+
+
+continued effrots to merge un even full lists of abbreveations and credits:
+```{r}
+df_abb= data.frame(unlist(all_abbreviations))
+df_credit= data.frame(unlist(all_credits))
+
+colnames(head_test_all)=c("abb", "credit")
+head_test_all
+
+test_abb= head(df_abb)
+```
+
+```{r}
+test_abb_names= setNames(cbind(rownames(test_abb), test_abb, row.names= NULL),
+                         c("url","abbreviation"))
+test_abb_names
+```
+
+```{r}
+rm(test_abb_names)
+rm(test_abb)
+rm(head_abb)
+rm(head_credit)
+```
+
+
+
+continued cleaning of credit from semi final data frame:
+```{r}
+class(total_course_info$credit)
+
+test_head_credit= head(total_course_info$credit)
+
+str_replace(test_head_credit, pattern = "credit:[:blank:]", replacement = "")
+
+str_view(test_head_credit, pattern = "credit")
+
+```
+
+```{r}
+rm(engl_url)
+rm(test_head_credit)
+rm(head_abb)
+rm(head_credit)
+rm(combined_head_abb)
+rm(result.df)
+rm(result)
+rm(test)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

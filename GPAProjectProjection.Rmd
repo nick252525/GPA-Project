@@ -16,10 +16,16 @@ Packages:
 install.packages("rvest")
 install.packages("stringr")
 install.packages("readxl")
+install.packages("dplyr")
+install.packages("htmlwidgets")
+```
 
+```{r}
 library("rvest")
 library("stringr")
 library("readxl")
+library("dplyr")
+library("htmlwidgets")
 ```
 
 
@@ -60,9 +66,6 @@ credit_function= function(x){
   }
 ```
 
-
-
-
 Extracting course abbreviation
 
 Not generalized yet:
@@ -90,6 +93,8 @@ abb_function = function(x) {
 ```
 
 
+Extracting credit hour
+
 extracting all course abbreviations and credit hours
 ```{r}
 all_abbreviations= mapply(FUN = abb_function, final_course_urls)
@@ -97,18 +102,61 @@ all_credits= mapply(FUN = credit_function, final_course_urls)
 ```
 
 
-combining all 
+creating dataframes for abbreviations and credits
 ```{r}
-head_abb=head(all_abbreviations,2)
 
+df_abb= data.frame(unlist(all_abbreviations))
+df_credit= data.frame(unlist(all_credits))
 
-abb_cred_all=data.frame(all_abbreviations,all_credits)
+df_abb_named= setNames(cbind(rownames(df_abb), df_abb, row.names= NULL),
+                         c("url","abbreviation"))
+
+df_credit_named= setNames(cbind(rownames(df_credit), df_credit, row.names= NULL),
+                         c("url","credit"))
 ```
 
+
+#Merginging data
+
+
+Merging abb and credit data frames
 ```{r}
-library(xlsx)
-write.xlsx(mydata, "c:/mydata.xlsx")
+abb_credit_df= merge(x= df_abb_named, y= df_credit_named, by=c("url"))
 ```
+
+Merging abb/credit data frame with gpa data set and cleaning
+```{r}
+total_course_info = merge(
+  x = abb_credit_df,
+  y = wade_datasetV2,
+  by.x = "abbreviation",
+  by.y = "ShortCourse",
+  all.y = TRUE
+)
+
+total_course_info = subset(total_course_info, select = -c(`Credit Hours`))
+```
+
+continued cleaning of credit hour
+```{r}
+total_course_info$credit = str_replace(total_course_info$credit,
+                                       pattern = "credit:[:blank:]",
+                                       replacement = "")
+
+as.numeric(total_course_info$credit)
+
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
