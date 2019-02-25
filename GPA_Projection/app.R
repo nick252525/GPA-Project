@@ -8,11 +8,15 @@ ui <- fluidPage(
     titlePanel("GPA Projection"),
 
    fluidRow(
-     column(2,
+     column(1,
             textInput(inputId = 'abb',
                       label = "Letter Course Name and Number",
-                      value = total_course_info$abbreviation),
+                      value = names(total_course_info$abbreviation)),
+            textOutput('abb')),
+     
+            br(),
             
+    column(1,        
             textInput(inputId = "credit",
                       label = "Enter desired credit hour if not already provided",
                       value = total_course_info$credit)

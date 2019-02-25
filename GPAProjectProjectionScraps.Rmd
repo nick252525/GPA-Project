@@ -169,6 +169,11 @@ rm(test)
 ```
 
 
+```{r}
+total_course_info$abbreviation
+```
+
+
 
 
 

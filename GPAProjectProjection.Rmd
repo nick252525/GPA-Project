@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 Packages:
-```{r}
+```{r,eval=FALSE}
 install.packages("rvest")
 install.packages("stringr")
 install.packages("readxl")
@@ -20,7 +20,7 @@ install.packages("dplyr")
 install.packages("htmlwidgets")
 ```
 
-```{r}
+```{r, eval=FALSE}
 library("rvest")
 library("stringr")
 library("readxl")
@@ -36,6 +36,8 @@ wade_datasetV2 <- read_excel("Wade_DatasetV2.xlsx",
 ```
 
 
+#HTML Scrapping
+
 Creation of URLs for extraction
 ```{r}
 course_abbreviations= unique(wade_datasetV2$Subject)
@@ -44,7 +46,7 @@ final_course_urls= paste0("http://catalog.illinois.edu/courses-of-instruction/",
 ```
 
 
-Extracting credit hours from the URLs  of each course.
+##Extracting credit hours from the URLs  of each course.
 
 Not generalized yet:
 ```{r}
@@ -116,7 +118,7 @@ df_credit_named= setNames(cbind(rownames(df_credit), df_credit, row.names= NULL)
 ```
 
 
-#Merginging data
+#Merginging and Cleaning Final Data set
 
 
 Merging abb and credit data frames
