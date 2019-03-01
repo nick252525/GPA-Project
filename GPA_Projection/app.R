@@ -7,35 +7,38 @@ ui <- fluidPage(
     # Application title
     titlePanel("GPA Projection"),
 
-   fluidRow(
-     column(1,
-            textInput(inputId = 'abb',
-                      label = "Letter Course Name and Number",
-                      value = names(total_course_info$abbreviation)),
-            textOutput('abb')),
+    sidebarLayout(
+      sidebarPanel(
+        selectInput(
+            inputId = "course_name",
+            label = "Type in course name and numbers",
+            multiple = TRUE,
+            choices = c(as.character(total_course_info$abbreviation))
+        ),
+        
+        submitButton()
+        ),
      
-            br(),
-            
-    column(1,        
-            textInput(inputId = "credit",
-                      label = "Enter desired credit hour if not already provided",
-                      value = total_course_info$credit)
-                        )
-     
-   )
-)
+    mainPanel(tabsetPanel(type = "tab", 
+                          tabPanel("Credit", textOutput("mycredit"))))
+    ))
 
-# Define server logic required to draw a histogram
+
+
 server <- function(input, output) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    active_df = reactive({
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+                subset(total_course_info_cleaned, abbreviation==input$course_name, 
+               select=c(credit))
     })
+    
+    
+    output$mycredit= renderPrint({
+        total_course_info_cleaned[1460,]$credit
+        
+    })
+    
 }
 
 # Run the application 

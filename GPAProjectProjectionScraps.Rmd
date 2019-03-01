@@ -169,8 +169,33 @@ rm(test)
 ```
 
 
+
+shiny app grabbing credit hour from given course name
+
 ```{r}
-total_course_info$abbreviation
+
+class(total_course_info$abbreviation)
+
+total_course_info_cleaned$abbreviation= as.character(total_course_info_cleaned$abbreviation)
+
+total_course_info_cleaned["AAS100",]$credit
+
+subset(total_course_info_cleaned)
+       
+subset(total_course_info_cleaned, abbreviation=="LER523", 
+select=c(credit))
+
+
+total_course_info_cleaned[1460,]$credit
+
+rownames(total_course_info_cleaned$abbreviation[`LER590`])
+
+
+rownames(total_course_info_cleaned$abbreviation["AAS100"])
+
+
+total_course_info_cleaned["AAS100",]$credit
+
 ```
 
 
