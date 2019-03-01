@@ -29,14 +29,14 @@ server <- function(input, output) {
 
     active_df = reactive({
 
-                subset(total_course_info_cleaned, abbreviation==input$course_name, 
-               select=c(credit))
+      subset(total_course_info_cleaned, abbreviation==as.character(input$course_name), 
+            select=c(credit)) 
     })
     
     
     output$mycredit= renderPrint({
-        total_course_info_cleaned[1460,]$credit
-        
+      active_df()$credit 
+      
     })
     
 }

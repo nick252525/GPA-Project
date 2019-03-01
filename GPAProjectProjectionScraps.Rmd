@@ -200,6 +200,17 @@ total_course_info_cleaned["AAS100",]$credit
 
 
 
+```{r}
+test=subset(total_course_info_cleaned, abbreviation=="ECE391", 
+               select=c(credit))
+
+test$credit        
+
+total_course_info_cleaned[1460,]$credit
+
+        
+        class("dog")
+```
 
 
 
