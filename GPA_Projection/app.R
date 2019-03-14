@@ -20,25 +20,36 @@ ui <- fluidPage(
         ),
      
     mainPanel(tabsetPanel(type = "tab", 
-                          tabPanel("Credit", textOutput("mycredit"))))
+                          tabPanel("Course Summary", textOutput("textt"))))
     ))
 
 
 
 server <- function(input, output) {
 
-    active_df = reactive({
+  active_df = reactive({
+    as.numeric(total_course_info_cleaned[total_course_info$abbreviation == input$course_name,]$credit)*total_course_info[total_course_info_cleaned$abbreviation == input$course_name,]$AverageGPA
+  })
+    
+  active2_df= reactive({
+    for (i in 1:length(input$course_name))
+      vector[i] <- values[i]
+    
+  })
+  
+  output$sum_table = renderTable({
+    course_info =  subset(
+      total_course_info,
+      abbreviation == input$course_name,
+      select = c(CourseTitle, credit, AverageGPA)
+    )
+  })
+  
 
-      subset(total_course_info_cleaned, abbreviation==as.character(input$course_name), 
-            select=c(credit)) 
-    })
-    
-    
-    output$mycredit= renderPrint({
-      active_df()$credit 
-      
-    })
-    
+  output$textt= renderText({active2_df})
+  
+  
+   
 }
 
 # Run the application 

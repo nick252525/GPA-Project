@@ -150,10 +150,38 @@ as.numeric(total_course_info$credit)
 ```
 
 
+Finding Average Credit Hour:
+```{r}
+credit_avg = function(x) {
+  value1 = str_extract(x, pattern = "[:digit:]")
+  value2 = str_extract(x, pattern = "[:digit:]$")
+  ifelse(value1 == value2, value1, (as.numeric(value1) + as.numeric(value2)) / 2)
+}
+```
+
+```{r}
+avg_credits = mapply(FUN = credit_avg, total_course_info$credit)
+avg_credits = as.numeric(avg_credits)
+
+total_course_info$AverageCredit = avg_credits
+total_course_info$AverageCredit
+```
 
 
+Average Semester GPA function:
+```{r}
+raw_gpa_fun = function(x) {
+  total_course_info[total_course_info$abbreviation == x,]$AverageCredit *
+    total_course_info[total_course_info$abbreviation == x, ]$AverageGPA
+}
+
+Semester_gpa_fun= function(x){
+  test=mapply(x, FUN = raw_gpa_fun)
+  sum(test)/(length(test)*4)
+}
 
 
+```
 
 
 

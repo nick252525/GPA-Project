@@ -213,8 +213,97 @@ total_course_info_cleaned[1460,]$credit
 ```
 
 
+```{r}
+head(total_course_info)
 
 
+head(total_course_info_cleaned)
+
+gpa_func= function(x){
+  subset(total_course_info_cleaned, abbreviation==x, 
+               select=c(credit)) %>%
+    as.numeric() %>%
+    "*" (subset(total_course_info_cleaned, abbreviation==x, 
+               select=c(AverageGPA)))
+    
+  
+}
+
+```
+
+
+```{r}
+c(6666,4444,333,2222)
+
+gpa_calculator= function(x){
+
+  total_credits= 0
+  for (i in length(x)) {
+    total_credits= total_credits+ x$credit[i]
+  }
+  
+  total_gpa_points=0
+  for (i in length(x)) {
+     average_gpa[i]= total_course_info[total_course_info$abbreviation == x, ] %>% subset(, AverageGPA)
+     credit[i]=  as.numeric(total_course_info[total_course_info$abbreviation == x, ] %>% subset(, credit))
+  total_gpa_points=total_gpa_points+ credit[i]*average_gpa[i]
+  } 
+  
+  final_gpa= total_gpa_points/total_credits
+  final_gpa
+  }
+
+gpa_calculator("LER591")
+
+
+test_credit = function(x) {
+  total_credits = 0
+  for (i in length(x)) {
+    total_credits = total_credits + subset(total_course_info,
+                                           abbreviation == x[i],
+                                           select = c(credit))
+    total_credits
+  }
+  
+}
+
+test_vec= c("LER591", "LER590")
+
+test_credit(test_vec)
+
+```
+
+
+```{r}
+test1=c(1,2,3,4,5)
+
+for (index in length(test1)) {
+  counter=0
+  counter[index]= counter+1
+  }
+
+```
+
+```{r}
+
+total_course_info$credit
+
+test_credit= c("1 to 4")
+
+credit_avg(test_credit)
+
+
+```
+
+```{r}
+
+"1 to 4" %>%
+  str_extract(pattern = "[:digit:]$")
+  
+
+
+
+```
 
 
 
