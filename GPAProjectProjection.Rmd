@@ -18,6 +18,9 @@ install.packages("stringr")
 install.packages("readxl")
 install.packages("dplyr")
 install.packages("htmlwidgets")
+install.packages("shinythemes")
+install.packages("shinyMatrix")
+
 ```
 
 ```{r, eval=FALSE}
@@ -26,6 +29,8 @@ library("stringr")
 library("readxl")
 library("dplyr")
 library("htmlwidgets")
+library("shinythemes")
+library("shinyMatrix")
 ```
 
 
@@ -175,18 +180,42 @@ raw_gpa_fun = function(x) {
     total_course_info[total_course_info$abbreviation == x, ]$AverageGPA
 }
 
-Semester_gpa_fun= function(x){
-  test=mapply(x, FUN = raw_gpa_fun)
-  sum(test)/(length(test)*4)
+raw_credit_fun= function(x){
+  total_course_info[total_course_info$abbreviation == x,]$AverageCredit
 }
 
+Semester_gpa_fun= function(x){
+  (sum(mapply(raw_gpa_fun, x)))/sum(mapply(raw_credit_fun, x))
+  
+}
+
+test_names2= c("AGED230", "AGED480", "PSYC475", "KIN247", "KIN104")
+
+(sum(mapply(raw_gpa_fun, test_names2)))/sum(mapply(raw_credit_fun, test_names2))
+
+sum(mapply(raw_gpa_fun, test_names2))
+
+Semester_gpa_fun("ECE391")
 
 ```
 
 
 
+Table output:
+```{r, eval=FALSE}
+helper_fun= function(x){subset(total_course_info, abbreviation==x, 
+select=c(`AverageCredit`, `AverageGPA`))}
+```
 
-
+```{r}
+summary_fun= function(x){
+ couse_data=(as.vector(t(mapply(helper_fun, x))))
+ my_data <- cbind(rownames(couse_data), couse_data)
+rownames(my_data) <- NULL
+colnames(my_data) <- c("Course Name","Credit Hour","GPA")
+my_data     
+ }
+```
 
 
 

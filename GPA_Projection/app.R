@@ -1,8 +1,6 @@
-library(shiny)
+library(shinythemes)
 
-
-# Define UI for application that draws a histogram
-ui <- fluidPage(
+ui= fluidPage(theme = shinytheme("united"),
 
     # Application title
     titlePanel("GPA Projection"),
@@ -20,33 +18,21 @@ ui <- fluidPage(
         ),
      
     mainPanel(tabsetPanel(type = "tab", 
-                          tabPanel("Course Summary", textOutput("textt"))))
+                          tabPanel("Projected Weighted GPA", textOutput("textt")),
+                          tabPanel("Summary of Course Info", tableOutput("sum_table"))))
     ))
 
 
 
 server <- function(input, output) {
 
-  active_df = reactive({
-    as.numeric(total_course_info_cleaned[total_course_info$abbreviation == input$course_name,]$credit)*total_course_info[total_course_info_cleaned$abbreviation == input$course_name,]$AverageGPA
-  })
-    
-  active2_df= reactive({
-    for (i in 1:length(input$course_name))
-      vector[i] <- values[i]
-    
-  })
-  
+ 
   output$sum_table = renderTable({
-    course_info =  subset(
-      total_course_info,
-      abbreviation == input$course_name,
-      select = c(CourseTitle, credit, AverageGPA)
-    )
+    (summary_fun(input$course_name))
   })
   
 
-  output$textt= renderText({active2_df})
+  output$textt= renderText({Semester_gpa_fun(input$course_name)})
   
   
    
