@@ -203,18 +203,20 @@ Semester_gpa_fun("ECE391")
 
 Table output:
 ```{r, eval=FALSE}
-helper_fun= function(x){subset(total_course_info, abbreviation==x, 
+subset_data_fun= function(x){subset(total_course_info, abbreviation==x, 
 select=c(`AverageCredit`, `AverageGPA`))}
 ```
 
 ```{r}
 summary_fun= function(x){
- couse_data=(as.vector(t(mapply(helper_fun, x))))
+ couse_data=((t(mapply(subset_data_fun, x))))
  my_data <- cbind(rownames(couse_data), couse_data)
 rownames(my_data) <- NULL
-colnames(my_data) <- c("Course Name","Credit Hour","GPA")
+colnames(my_data) <- c("Course Name","Average Credit Hour","Average GPA")
 my_data     
  }
+
+class(summary_fun(test_names2))
 ```
 
 
