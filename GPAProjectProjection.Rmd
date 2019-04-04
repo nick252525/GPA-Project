@@ -5,6 +5,7 @@ date: "2/18/2019"
 output: html_document
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -44,7 +45,7 @@ wade_datasetV2 <- read_excel("Wade_DatasetV2.xlsx",
 #HTML Scrapping
 
 Creation of URLs for extraction
-```{r}
+```{r, eval=FALSE}
 course_abbreviations= unique(wade_datasetV2$Subject)
 
 final_course_urls= paste0("http://catalog.illinois.edu/courses-of-instruction/",tolower(course_abbreviations),"/")
@@ -54,7 +55,7 @@ final_course_urls= paste0("http://catalog.illinois.edu/courses-of-instruction/",
 ##Extracting credit hours from the URLs  of each course.
 
 Not generalized yet:
-```{r}
+```{r, eval=FALSE}
 Course_credits =
   read_html(psyc) %>%
   html_nodes(".courseblocktitle") %>%
@@ -76,7 +77,7 @@ credit_function= function(x){
 Extracting course abbreviation
 
 Not generalized yet:
-```{r}
+```{r, eval=FALSE}
 Course_abbreviations=
 read_html(psyc) %>%
   html_nodes(".courseblocktitle") %>%
@@ -103,14 +104,14 @@ abb_function = function(x) {
 Extracting credit hour
 
 extracting all course abbreviations and credit hours
-```{r}
+```{r, eval=FALSE}
 all_abbreviations= mapply(FUN = abb_function, final_course_urls)
 all_credits= mapply(FUN = credit_function, final_course_urls)
 ```
 
 
 creating dataframes for abbreviations and credits
-```{r}
+```{r, eval=FALSE}
 
 df_abb= data.frame(unlist(all_abbreviations))
 df_credit= data.frame(unlist(all_credits))
@@ -127,7 +128,7 @@ df_credit_named= setNames(cbind(rownames(df_credit), df_credit, row.names= NULL)
 
 
 Merging abb and credit data frames
-```{r}
+```{r, eval=FALSE}
 abb_credit_df= merge(x= df_abb_named, y= df_credit_named, by=c("url"))
 ```
 
@@ -169,7 +170,7 @@ avg_credits = mapply(FUN = credit_avg, total_course_info$credit)
 avg_credits = as.numeric(avg_credits)
 
 total_course_info$AverageCredit = avg_credits
-total_course_info$AverageCredit
+
 ```
 
 
@@ -188,14 +189,6 @@ Semester_gpa_fun= function(x){
   (sum(mapply(raw_gpa_fun, x)))/sum(mapply(raw_credit_fun, x))
   
 }
-
-test_names2= c("AGED230", "AGED480", "PSYC475", "KIN247", "KIN104")
-
-(sum(mapply(raw_gpa_fun, test_names2)))/sum(mapply(raw_credit_fun, test_names2))
-
-sum(mapply(raw_gpa_fun, test_names2))
-
-Semester_gpa_fun("ECE391")
 
 ```
 
@@ -219,6 +212,25 @@ my_data
 class(summary_fun(test_names2))
 ```
 
+```{r, eval=FALSE}
+install.packages('rsconnect')
+
+rsconnect::setAccountInfo(name='nick-tandle',
+			  token='944AC748A59FFC7FCA62873FC92E3979',
+			  secret='wGUC5v8EcQbhxm4RbtOShTeYitg31cY4pNIAz+vX')
+
+library(rsconnect)
+rsconnect::deployApp()
+```
+
+
+
+```{r}
+install.packages("profvis")
+
+library(profvis)
+profvis(runApp())
+```
 
 
 

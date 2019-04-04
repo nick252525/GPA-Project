@@ -143,8 +143,6 @@ rm(head_abb)
 rm(head_credit)
 ```
 
-
-
 continued cleaning of credit from semi final data frame:
 ```{r}
 class(total_course_info$credit)
